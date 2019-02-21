@@ -1,0 +1,4 @@
+FROM golang:latest
+
+LABEL Author="Bojanche Stojchevski"
+LABEL Name="edo-api"
