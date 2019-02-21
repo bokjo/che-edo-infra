@@ -6,7 +6,7 @@ services:
     #TODO: Consider building and pushing the image to GitLab registry!
     image: edo-api:latest
     ports:
-      - 1234:1234
+      - 1234
     environment:
       - SERVICE_PORTS=1234  
     depends_on:
@@ -22,8 +22,8 @@ services:
        window: 60s      
     #volumes:
     #- ./logs:/var/log
-    networks:
-      - api
+    #networks:
+    #  - api
 
   # TODO: Obsolete for stack swarm mode - remove    
   lb:
@@ -37,8 +37,8 @@ services:
     deploy:
       placement:
         constraints: [node.role == manager] 
-    networks:
-      - api 
+    #networks:
+    #  - api 
 
   #TODO: Consider adding container for PGAdmin for easy management of the DB locally    
   db:
@@ -58,11 +58,11 @@ services:
        window: 60s
     ports:
       - "5432:5432"
-    networks:
-      - api  
+    #networks:
+    #  - api  
     #volumes:
     #  - ./postgres/pg-data:/var/lib/postgresql/data
     #  - ./postgres/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql   
-networks:
-  api:
-    driver: overlay
+#networks:
+#  api:
+#    driver: overlay
