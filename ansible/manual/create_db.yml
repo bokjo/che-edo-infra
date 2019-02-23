@@ -1,0 +1,77 @@
+- hosts: db
+  become: true
+  tasks:
+  - name: Update
+    yum:
+      name: "*"
+      state: latest
+      disable_gpg_check: yes
+  - name: Pythontools
+    yum:
+      name: 'python-setuptools'
+      state: latest
+      disable_gpg_check: yes
+  - name: 'Install EPEL-release'
+    yum:
+      name: 'epel-release'
+      state: present
+      disable_gpg_check: yes
+  
+  - name: Install PIP
+    yum:
+      name: python-pip
+      state: present
+      update_cache: yes
+  
+  - name: install psycopg2 python module
+    pip: name=psycopg2
+  
+  - name: Install Dependencies for PostgreSQL
+    yum: 
+      name: ['bash', 'openssl'] 
+      update_cache: true 
+      state: latest 
+
+  - name: Install PostgreSQL
+    yum: 
+      name: ['postgresql-server', 'postgresql-contrib', 'python-psycopg2'] 
+      update_cache: true 
+      state: installed    
+
+  - name: Configure Postgres initDB
+    shell: 'postgresql-setup initdb'  
+  
+  - name: Restart postgres
+    service: name=postgresql state=restarted
+  
+  - name: 'Create edo-api database'
+    sudo_user: postgres
+    postgresql_db: 
+      name: edo-api
+      encoding: 'UTF-8'
+      lc_collate: 'en_US.UTF-8'
+      lc_ctype: 'en_US.UTF-8'
+      template: 'template0'
+      state: present
+      login_password: postgres
+
+  - name: Check if postgres user has access to the database
+    sudo_user: postgres
+    postgresql_user: 
+      db: edo-api
+      name: postgres
+      password: postgres
+      priv: ALL
+      state: present
+      login_password: postgres
+
+  - name: Copy initJobsTable.sql to the DB server
+    copy:
+      dest: /home/bokjo/
+      src: /home/bokjo/initJobsTable.sql
+      mode: 0755    
+
+  - name: Create the JOBS table if not exists
+    shell: "psql -U postgres -f /home/bokjo/initJobsTable.sql edo-api"
+    environment:
+      PGPASSWORD: postgres

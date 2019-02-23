@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# Update hosts file
+# Update hosts file - doeset work for hyperv - only vbox
 echo "[TASK 1] Update /etc/hosts file"
 cat >>/etc/hosts<<EOF
-192.168.137.82 master.example.com master
-192.168.137.21 worker1.example.com worker1
-192.168.137.100 worker2.example.com worker2
+172.42.42.100 ansible.example.com ansible
+172.42.42.101 api-1.example.com api-1
+172.42.42.102 api-2.example.com api-2
+172.42.42.103 db.example.com db
 EOF
 
 # Install docker from Docker-ce repository
@@ -29,45 +30,10 @@ echo "[TASK 5] Stop and Disable firewalld"
 systemctl disable firewalld >/dev/null 2>&1
 systemctl stop firewalld
 
-# Add sysctl settings
-echo "[TASK 6] Add sysctl settings"
-#cat >>/etc/sysctl.d/kubernetes.conf<<EOF
-#net.bridge.bridge-nf-call-ip6tables = 1
-#net.bridge.bridge-nf-call-iptables = 1
-#EOF
-#sysctl --system >/dev/null 2>&1
-
 # Disable swap
-echo "[TASK 7] Disable and turn off SWAP"
+echo "[TASK 6] Disable and turn off SWAP"
 sed -i '/swap/d' /etc/fstab
 swapoff -a
-
-# Add yum repo file for Kubernetes
-echo "[TASK 8] Add yum repo file for kubernetes"
-#cat >>/etc/yum.repos.d/kubernetes.repo<<EOF
-#[kubernetes]
-#name=Kubernetes
-#baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
-#enabled=1
-#gpgcheck=1
-#repo_gpgcheck=1
-#gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg
-#        https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
-#EOF
-
-# Install Kubernetes
-echo "[TASK 9] Install Kubernetes (kubeadm, kubelet and kubectl)"
-#yum install -y -q kubeadm kubelet kubectl >/dev/null 2>&1
-
-# Start and Enable kubelet service
-echo "[TASK 10] Enable and start kubelet service"
-#systemctl enable kubelet >/dev/null 2>&1
-#systemctl start kubelet >/dev/null 2>&1
-
-# Enable ssh password authentication
-echo "[TASK 11] Enable ssh password authentication"
-sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-systemctl reload sshd
 
 # Set Root password
 echo "[TASK 12] Set root password"
@@ -75,3 +41,5 @@ echo "[TASK 12] Set root password"
 
 # Update vagrant user's bashrc file
 echo "export TERM=xterm" >> /etc/bashrc
+
+#Genereate SSH key pair

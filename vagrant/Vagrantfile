@@ -8,37 +8,56 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", path: "bootstrap.sh"
   config.vm.boot_timeout = 900
 
-  # Master
-  config.vm.define "master" do |master|
-    master.vm.box = "centos/7"
-    master.vm.hostname = "master.example.com"
-    #master.vm.network "private_network", ip: "172.42.42.100"
-    master.vm.network :public_network, bridge: 'VagrantMaster'
-    master.vm.provider "hyperv" do |v|
-      v.vmname = "master"
-      v.memory = 2048
-      v.cpus = 2
+  # Ansible
+  config.vm.define "ansible" do |ansible|
+    ansible.vm.box = "centos/7"
+    ansible.vm.hostname = "ansible.example.com"
+    #vBox
+    #ansible.vm.network "private_network", ip: "172.42.42.100"
+    ansible.vm.network :public_network, bridge: 'VagrantMaster'
+    ansible.vm.provider "hyperv" do |v|
+      v.vmname = "ansible"
+      v.memory = 1024
+      v.cpus = 1
       v.ip_address_timeout = 600
     end
-    master.vm.provision "shell", path: "bootstrap_master.sh"
+    ansible.vm.provision "shell", path: "bootstrap_ansible.sh"
   end
 
-  NodeCount = 2
+  ApiCount = 2
 
-  # Nodes
-  (1..NodeCount).each do |i|
-    config.vm.define "worker#{i}" do |workernode|
-      workernode.vm.box = "centos/7"
-      workernode.vm.hostname = "workernode#{i}.example.com"
-      workernode.vm.network :public_network, bridge: 'VagrantMaster' 
-      workernode.vm.provider "hyperv" do |v|
-        v.vmname = "workernode#{i}"
+  # API
+  (1..ApiCount).each do |i|
+    config.vm.define "api-#{i}" do |api|
+    api.vm.box = "centos/7"
+    api.vm.hostname = "api-#{i}.example.com"
+      #vBox
+      #ansible.vm.network "private_network", ip: "172.42.42.10#{i}"
+      api.vm.network :public_network, bridge: 'VagrantMaster' 
+      api.vm.provider "hyperv" do |v|
+        v.vmname = "api-#{i}"
         v.memory = 1024
         v.cpus = 1
         v.ip_address_timeout = 600
       end
-      #workernode.vm.provision "shell", path: "bootstrap_nodes.sh"
+      #api.vm.provision "shell", path: "bootstrap_api.sh"
     end
+  end
+
+  # DB
+  config.vm.define "db" do |db|
+    ansible.vm.box = "centos/7"
+    ansible.vm.hostname = "db.example.com"
+    #vBox
+    #ansible.vm.network "private_network", ip: "172.42.42.103"
+    db.vm.network :public_network, bridge: 'VagrantMaster'
+    db.vm.provider "hyperv" do |v|
+      v.vmname = "db"
+      v.memory = 1024
+      v.cpus = 1
+      v.ip_address_timeout = 600
+    end
+    ansible.vm.provision "shell", path: "bootstrap_db.sh"
   end
 
 end

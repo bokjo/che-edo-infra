@@ -1,0 +1,9 @@
+-- Unit postgresql.service has begun starting up.
+Feb 23 13:14:56 edo-api-db postgresql-check-db-dir[53257]: "/var/lib/pgsql/data" is missing or empty.
+Feb 23 13:14:56 edo-api-db postgresql-check-db-dir[53257]: Use "postgresql-setup initdb" to initialize the database cluster.
+Feb 23 13:14:56 edo-api-db postgresql-check-db-dir[53257]: See /usr/share/doc/postgresql-9.2.24/README.rpm-dist for more information.
+Feb 23 13:14:56 edo-api-db systemd[1]: postgresql.service: control process exited, code=exited status=1
+Feb 23 13:14:56 edo-api-db systemd[1]: Failed to start PostgreSQL database server.
+-- Subject: Unit postgresql.service has failed
+-- Defined-By: systemd
+-- Support: http://lists.freedesktop.org/mailman/listinfo/systemd-devel

@@ -1,0 +1,8 @@
+- name: Start Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Start the virtual machine
+    azure_rm_virtualmachine:
+      resource_group: edo-api
+      name: edo-api-vm1

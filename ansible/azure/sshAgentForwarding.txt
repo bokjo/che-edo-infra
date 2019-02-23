@@ -1,0 +1,17 @@
+ssh -i ~/.ssh/id_rsa user@our_host_ip
+
+eval "$(ssh-agent -s)"
+
+ssh-add ~/.ssh/id_rsa
+
+---
+ssh -i ~/.ssh/id_rsa user@our_host_ip
+
+ssh -i ~/.ssh/id_rsa
+
+~/.ssh/config
+
+Host myhost.com
+  ForwardAgent yes
+
+  ssh -A user@myhost.com  -- shortcut, not needed the config file

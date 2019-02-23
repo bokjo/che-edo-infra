@@ -1,0 +1,11 @@
+[Unit]
+Description=EDO API service
+After=network.target
+
+[Service]
+ExecStart=/home/bokjo/api/edo-api
+Type=forking
+Restart=always
+
+[Install]
+WantedBy=default.target
