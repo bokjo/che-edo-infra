@@ -67,11 +67,11 @@
 
   - name: Copy initJobsTable.sql to the DB server
     copy:
-      dest: /home/bokjo/
-      src: /home/bokjo/initJobsTable.sql
+      dest: /home/bstojchevski/
+      src: /home/bstojchevski/initJobsTable.sql
       mode: 0755    
 
   - name: Create the JOBS table if not exists
-    shell: "psql -U postgres -f /home/bokjo/initJobsTable.sql edo-api"
+    shell: "psql -U postgres -f /home/bstojchevski/initJobsTable.sql edo-api"
     environment:
       PGPASSWORD: postgres
