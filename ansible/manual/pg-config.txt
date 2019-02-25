@@ -1,0 +1,7 @@
+# Add the edo-api subnet in the config, later do it with Ansible templates
+
+sudo vim /var/lib/pgsql/data/pg_hba.conf
+
+# Change the listen_addresses to '*' - all or add IP addresses to listen on ---> Requires restart
+
+sudo vim /var/lib/pgsql/data/postgresql.conf
